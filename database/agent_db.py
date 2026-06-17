@@ -40,7 +40,7 @@ class AgentDB:
         cursor.execute("SELECT * FROM agents WHERE id = %s", (id,))
         agent_by_id = cursor.fetchone()
         cursor.close()
-        return agent_by_id if agent_by_id else []
+        return agent_by_id if agent_by_id else None
 
     def update_agent(self, id: int, data: UpdateAgent):
         _data = data.model_dump(exclude_unset=True)
@@ -109,3 +109,6 @@ class AgentDB:
         sum_active = cursor.fetchone()
         cursor.close()
         return sum_active if sum_active else 0
+    
+
+db = AgentDB()
