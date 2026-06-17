@@ -5,13 +5,14 @@ class DB_connection:
         self.conn = None
         self.get_conncation()
         self.create_database()
-        self.close_db()
+        self.create_tables()
+
 
     def connect(self):
         self.conn = mysql.connector.connect(
             host= 'localhost',
             user= 'root',
-            password = 1234,
+            password = '1234',
             database = 'Intelligence_db'
             )
         
@@ -35,10 +36,10 @@ class DB_connection:
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(30) NOT NULL,
             specialty VARCHAR(50) NOT NULL,
-            is_active BOOLEAN DEAFULT TRUE,
-            completed_missions INT DEAFULT 0,
-            failed_missions INT DEAFULT 0,
-            agent_rank ENUM('Junior', 'Senior', 'Commander') NOT NULL,
+            is_active BOOLEAN DEFAULT TRUE,
+            completed_missions INT DEFAULT 0,
+            failed_missions INT DEFAULT 0,
+            agent_rank ENUM('Junior', 'Senior', 'Commander') NOT NULL
             )
             '''
             )
@@ -53,9 +54,9 @@ class DB_connection:
             location VARCHAR(100) NOT NULL,
             difficulty INT NOT NULL,
             importance INT NOT NULL,
-            status VARCHAR(30) DEAFULT NEW,
+            status VARCHAR(30) DEFAULT 'NEW',
             risk_level VARCHAR(30) NOT NULL,
-            assigned_agent_id INT DEAFULT NULL
+            assigned_agent_id INT DEFAULT NULL
             )
             '''
         )
