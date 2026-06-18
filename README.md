@@ -11,10 +11,21 @@
 # מבנה התיקיות
 ```text
 intelligence-task-manager/
+├── main.py
 ├── database/
 │   ├── db_connection.py
 │   ├── agent_db.py
 │   └── mission_db.py
+|
+├── routes/
+│   ├── agent_routes.py
+│   ├── mission_routes.py
+│   └── report_routes.py
+|
+├── logs/
+│   ├── app.log
+│   ├── logger_config.py
+|
 ├── README.md
 ├── requirements.txt
 └── .gitignore
@@ -71,7 +82,7 @@ def count_active_agents() #מחזירה את מספר הסוכנים הפעיל�
 def create_mission(data) # יצירת משימה חדשה ומחזירה את כל האובייקט
 def get_all_missions() # מחזירה את כל המשימות
 def get_mission_by_id(id) # מחזירה משימה אחת לפי ID, או None
-def assign_mission(m_id, a_id) # משייכת משימה לסוכן
+def assign_mission(mission_id, agent_id) # משייכת משימה לסוכן
 def update_mission_status(id, status) # משמשת לכל שינוי סטטוס
 def get_open_missions_by_agent(id) # מחזירה משימות ASSIGNED/IN_PROGRESS של סוכן
 def count_all_missions() # סה"כ משימות
@@ -104,7 +115,70 @@ def get_top_agent() # הסוכן עם completed_missions הגבוה ביותר
 10: ניתן לבטל רק משימה בסטטוס NEW או ASSIGNED — אחרת שגיאה.
 ```
 
+# רשימת Endpoints - מלאה
+*agent_routes.py*
+```python
+@router.post('/agents') # יצירת סוכן חדש
+@router.get('/agents') # כל הסוכנים
+@router.get('/agents/{id}') # סוכן לפי ID
+@router.put('/agents/{id}')# עדכון סוכן
+@router.put('/agents/{id}/deactivate') # השבתת סוכן
+@router.get('/agents/{id}/performance') # ביצועי סוכן
+```
+
+*mission_routes.py*
+```python
+@router.post('/missions') # צירת משימה
+@router.get('/missions') # כל המשימות
+@router.get('/missions/{id}') # משימה לפי ID
+@router.put('/missions/{id}/assign/{agent_id}') # שיוך לסוכן (6 בדיקות מוסבר בהמשך)
+@router.put('/missions/{id}/start') # התחלת משימה
+@router.put('/missions/{id}/complete') # סיום בהצלחה
+@router.put('/missions/{id}/fail') # סיום בכישלון
+@router.put('/missions/{id}/cancel') # ביטול משימה
+```
+
+*report_routes.py*
+```python
+@router.get('/reports/summary') # דוח כללי של המערכת
+@router.get('/reports/missions-by-status') # משימות לפי סטטוס
+@router.get('/reports/top-agent') # הסוכן המצטיין (get_top_agent)
+```
+
+# זרימת המערכת
+```text
+The user enters the system through the server powered by FASTAPI. For example, the user chooses to add an agent to the list... He enters - @router.post('/agents') which activates the function - def create_agent(data) with the agent's details... The system checks that all the data the user entered is correct according to the system settings and the table settings. And if they are approved... the creation is successfully created... and at the end the system returns the user the details of the newly created agent... Another example - for assigning a task to an agent... The user enters - @router.put('/missions/{id}/assign/{agent_id}') which runs a function - def assign_mission(mission_id, agent_id) b and the system performs 6 checks to see if the agent meets all the criteria for assigning a task:
+1. If the task exists
+2. If the agent exists
+3. If the agent is active
+4. If the agent does not have 3 tasks assigned to it (in progress, assigned)
+5. If the task is defined as new
+6. If the agent matches the task in the risk_level rating
+And after everything is approved the system associates the task to the agent and updates the status to - Assigned
+And at the end the system returns a success message to the user...
+```
+
 # הוראות הרצה
 ```bash
 docker run -d --name intelligence-mysql -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=Intelligence_db -p 3306:3306 mysql:8.0
+```
+
+```bash
+python3 -m venv .venv
+```
+
+```bash
+source .venv/bin/activate
+```
+
+```bash
+pip install fastapi[standard]
+```
+
+```bash
+pip install mysql-connector-python
+```
+
+```bash
+pip freeze -> requirements.txt
 ```
