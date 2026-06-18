@@ -3,8 +3,9 @@ import mysql.connector
 class DB_connection:
     def __init__(self):
         self.conn = None
-        self.get_conncation()
+        self.connect()
         self.create_database()
+        self.get_conncation()
         self.create_tables()
 
 
@@ -13,7 +14,7 @@ class DB_connection:
             host= 'localhost',
             user= 'root',
             password = '1234',
-            database = 'intelligence_db'
+            database = 'Intelligence_db'
             )
         
     def get_conncation(self):
@@ -23,8 +24,8 @@ class DB_connection:
     
     def create_database(self):
         with self.conn.cursor() as cursor:
-            cursor.execute("CREATE DATABASE IF NOT EXISTS intelligence_db")
-            cursor.execute("USE intelligence_db")
+            cursor.execute("CREATE DATABASE IF NOT EXISTS Intelligence_db")
+            cursor.execute("USE Intelligence_db")
             self.conn.commit()
 
 

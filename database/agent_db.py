@@ -18,9 +18,9 @@ class UpdateAgent(BaseModel):
 class AgentDB:
     def create_agent(self, data: NewAgent):
         _data = data.model_dump()
-        value = [v for v in _data.values()]
+        value = list(_data.values())
         cursor = db.conn.cursor(dictionary=True)
-        cursor.execute("INSERT INTO agents (name, specialty, agent_rank) VALUES (%s, %s, %s)", (value,))
+        cursor.execute("INSERT INTO agents (name, specialty, agent_rank) VALUES (%s, %s, %s)", tuple(value))
         db.conn.commit()
         row_id = cursor.lastrowid
         cursor.execute("SELECT * FROM agents WHERE id = %s", (row_id,))
@@ -45,10 +45,11 @@ class AgentDB:
     def update_agent(self, id: int, data: UpdateAgent):
         _data = data.model_dump(exclude_unset=True)
         items = [f"{key} = %s" for key in _data.keys()]
-        values = [v for v in _data.values()]
+        values = list(_data.values())
         values.append(id)
+        query = f"UPDATE agents SET {', '.join(items)} WHERE id = %s"
         cursor = db.conn.cursor(dictionary=True)
-        cursor.execute("UPDATE agents SET (%s) WHERE id = %s", (items, values))
+        cursor.execute(query, tuple(values))
         db.conn.commit()
         is_update = cursor.rowcount > 0
         cursor.close()
@@ -104,11 +105,10 @@ class AgentDB:
 
     def count_active_agents(self):
         cursor = db.conn.cursor(dictionary=True)
-        cursor.execute("SELECT COUNT(*) FROM agents WHERE is_active = TRUE")
-        db.conn.commit()
-        sum_active = cursor.fetchone()
+        cursor.execute("SELECT COUNT(*) AS count FROM agents WHERE is_active = TRUE")
+        result = cursor.fetchone()
         cursor.close()
-        return sum_active if sum_active else 0
+        return result["count"] if result else 0
     
 
 db = AgentDB()
