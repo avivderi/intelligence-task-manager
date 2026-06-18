@@ -1,16 +1,4 @@
-from db_connection import DB_connection
-from pydantic import BaseModel
-
-db = DB_connection()
-
-class UpdateAgent(BaseModel):
-    name: str | None = None
-    specialty: str | None = None
-    is_active: bool | None = None
-    completed_missions: int | None = None
-    failed_missions: int | None = None
-    agent_rank: str | None = None
-
+from db_connection import DB as db
 
 class AgentDB:
     def create_agent(self, data: dict):
@@ -29,19 +17,18 @@ class AgentDB:
         cursor.execute("SELECT * FROM agents")
         all_agent = cursor.fetchall()
         cursor.close()
-        return all_agent if all_agent else []
+        return all_agent if all_agent else None
 
-    def get_agent_by_id(self, id: int):
+    def get_agent_by_id(self, id):
         cursor = db.conn.cursor(dictionary=True)
         cursor.execute("SELECT * FROM agents WHERE id = %s", (id,))
         agent_by_id = cursor.fetchone()
         cursor.close()
         return agent_by_id if agent_by_id else None
 
-    def update_agent(self, id: int, data: UpdateAgent):
-        _data = data.model_dump(exclude_unset=True)
-        items = [f"{key} = %s" for key in _data.keys()]
-        values = list(_data.values())
+    def update_agent(self, id, data):
+        items = [f"{key} = %s" for key in data.keys()]
+        values = list(data.values())
         values.append(id)
         query = f"UPDATE agents SET {', '.join(items)} WHERE id = %s"
         cursor = db.conn.cursor(dictionary=True)
@@ -49,19 +36,14 @@ class AgentDB:
         db.conn.commit()
         is_update = cursor.rowcount > 0
         cursor.close()
-        if is_update:
-            return "The operation was successful."
-        return "The operation failed."
-
+        
     def deactivate_agent(self, id: int):
         cursor = db.conn.cursor(dictionary=True)
         cursor.execute("UPDATE agents SET is_active = FALSE WHERE id = %s", (id,))
         db.conn.commit()
         is_update = cursor.rowcount > 0
         cursor.close()
-        if is_update:
-            return "The operation was successful."
-        return "The operation failed."
+        return is_update
 
 
     def incremente_completed(self, id: int):
@@ -106,5 +88,3 @@ class AgentDB:
         cursor.close()
         return result["count"] if result else 0
     
-
-adb = AgentDB()
