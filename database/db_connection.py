@@ -68,5 +68,3 @@ class DB_connection:
         self.conn.close()
 
 DB = DB_connection()
-
-

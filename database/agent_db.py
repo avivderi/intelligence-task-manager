@@ -1,10 +1,7 @@
-from db_connection import DB as db
+from db_connection import DB_connection
 from pydantic import BaseModel
 
-class NewAgent(BaseModel):
-    name: str
-    specialty: str
-    agent_rank: str
+db = DB_connection()
 
 class UpdateAgent(BaseModel):
     name: str | None = None
@@ -16,9 +13,8 @@ class UpdateAgent(BaseModel):
 
 
 class AgentDB:
-    def create_agent(self, data: NewAgent):
-        _data = data.model_dump()
-        value = list(_data.values())
+    def create_agent(self, data: dict):
+        value = list(data.values())
         cursor = db.conn.cursor(dictionary=True)
         cursor.execute("INSERT INTO agents (name, specialty, agent_rank) VALUES (%s, %s, %s)", tuple(value))
         db.conn.commit()
@@ -111,4 +107,4 @@ class AgentDB:
         return result["count"] if result else 0
     
 
-db = AgentDB()
+adb = AgentDB()

@@ -9,10 +9,6 @@ class NewMisson(BaseModel):
     difficulty:int
     importance: int
 
-class FixInt(BaseModel):
-    difficulty:int | None = None
-    importance: int
-
 class MissionDB:
     def calculte_risk_level(self, data: int):
         risk_level = (data["difficulty"] * 2) + data["importance"]
