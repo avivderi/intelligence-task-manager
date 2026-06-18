@@ -1,13 +1,7 @@
-from db_connection import DB as db
-from pydantic import BaseModel
-from agent_db import db as agent_db
+from database.db_connection import DB as db
+from database.agent_db import AgentDB
 
-class NewMisson(BaseModel):
-    title: str
-    description: str
-    location: str
-    difficulty:int
-    importance: int
+agent_db = AgentDB()
 
 class MissionDB:
     def calculte_risk_level(self, data: int):
@@ -22,12 +16,9 @@ class MissionDB:
             level = "CRITICAL"
         return level
 
-    def create_mission(self, data: NewMisson):
-        _data = data.model_dump()
-        if not (1 <= _data["difficulty"] <= 10) or not (1 <= _data["importance"] <= 10):
-            raise ValueError("Choose a number between 1 and 10")
-        risk_level = self.calculte_risk_level(_data)
-        value = list(_data.values())
+    def create_mission(self, data):
+        risk_level = self.calculte_risk_level(data)
+        value = list(data.values())
         value.append(risk_level)
         cursor = db.conn.cursor(dictionary=True)
         cursor.execute(
@@ -46,7 +37,7 @@ class MissionDB:
         cursor.execute("SELECT * FROM missions")
         all_missions = cursor.fetchall()
         cursor.close()
-        return all_missions if all_missions else []
+        return all_missions if all_missions else None
 
     def get_mission_by_id(self, id):
         cursor = db.conn.cursor(dictionary=True)
@@ -57,22 +48,11 @@ class MissionDB:
     
     def assign_mission(self, mission_id, agent_id):
         cursor = db.conn.cursor(dictionary=True)
-        agent = agent_db.get_agent_by_id(agent_id)
-        if agent["is_active"] == True:
-            all_mission_of_agent = self.get_open_missions_by_agent(agent_id)
-            mission_by_id = self.get_mission_by_id(mission_id)
-            if mission_by_id["status"] == "NEW":
-                check_risk_level = mission_by_id["risk_level"]
-                if len(all_mission_of_agent) < 3:
-                    if check_risk_level == "CRITICAL" and agent["agent_rank"] != "Commander":
-                        return "The agent cannot accept this task."
-                    cursor.execute("UPDATE missions SET assigned_agent_id = %s, status = 'ASSIGNED' WHERE id = %s", (agent_id, mission_id))
-                    db.conn.commit()
-                    is_update = cursor.rowcount > 0
-                    cursor.close()
-                    if is_update:
-                        return "The operation was successful."
-        return "The operation failed."
+        cursor.execute("UPDATE missions SET assigned_agent_id = %s, status = 'ASSIGNED' WHERE id = %s", (agent_id, mission_id))
+        db.conn.commit()
+        is_update = cursor.rowcount > 0
+        cursor.close()
+        return is_update
 
     def update_mission_status(self, id, status):
         cursor = db.conn.cursor(dictionary=True)

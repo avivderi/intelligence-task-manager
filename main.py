@@ -6,7 +6,7 @@ from routes.report_routes import router as report_routes
 from logs.logger_config import logger
 from mysql.connector import errors as mysql_errors
 from contextlib import asynccontextmanager
-from database.db_connection import db
+from database.db_connection import DB as db
 
 @asynccontextmanager
 async def lifspen_app(app: FastAPI):

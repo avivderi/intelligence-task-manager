@@ -3,18 +3,12 @@ import mysql.connector
 class DB_connection:
     def __init__(self):
         self.conn = None
-        self.connect()
-        self.create_database()
-        self.get_conncation()
-        self.create_tables()
-
 
     def connect(self):
         self.conn = mysql.connector.connect(
             host= 'localhost',
             user= 'root',
-            password = '1234',
-            database = 'Intelligence_db'
+            password = '1234'
             )
         
     def get_conncation(self):

@@ -1,0 +1,19 @@
+2026-06-18 15:35:30,632 - INFO - Starts running the all_agents
+2026-06-18 15:35:30,634 - WARNING - No agents for showing
+2026-06-18 15:36:07,630 - INFO - Starting to create an agent
+2026-06-18 15:36:07,660 - INFO - The agent was created successfully.
+2026-06-18 15:36:25,783 - INFO - Starts running the get_agent_by_id
+2026-06-18 15:36:25,785 - INFO - The operation was completed successfully.
+2026-06-18 15:40:33,370 - INFO - Starts running the update_agent
+2026-06-18 15:40:33,382 - WARNING - The operation failed.
+2026-06-18 15:40:48,911 - INFO - Starts running the deactivate_agent
+2026-06-18 15:40:48,914 - WARNING - The operation failed.
+2026-06-18 15:40:57,575 - INFO - Starts running the deactivate_agent
+2026-06-18 15:40:57,578 - WARNING - The operation failed.
+2026-06-18 15:41:44,067 - INFO - Starts running the all_agents
+2026-06-18 15:41:44,070 - INFO - The operation was completed successfully.
+2026-06-18 15:57:55,287 - INFO - Starts running the agent_performance
+2026-06-18 15:57:55,290 - INFO - The operation was completed successfully.
+2026-06-18 15:58:46,940 - INFO - The operation was successful.
+2026-06-18 16:02:12,226 - INFO - The operation was successful.
+2026-06-18 16:02:28,943 - INFO - The operation was successful.

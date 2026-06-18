@@ -1,4 +1,4 @@
-from db_connection import DB as db
+from database.db_connection import DB as db
 
 class AgentDB:
     def create_agent(self, data: dict):
@@ -71,15 +71,15 @@ class AgentDB:
     def get_agent_performance(self, id: int):
         cursor = db.conn.cursor(dictionary=True)
         cursor.execute("SELECT completed_missions, failed_missions FROM agents WHERE id = %s", (id,))
-        items = cursor.fetchall()
+        items = cursor.fetchone()
         cursor.close()
-        total = int(items["completed_missions"])
+        completed = int(items["completed_missions"])
         failed = int(items["failed_missions"])
-        completed = total + failed
-        if completed != 0:
-            success_rate = (total / completed) * 100
-            return {"total": total, "failed": failed, "completed": completed, "success_rate": success_rate}
-        return {"total": total, "failed": failed, "completed": completed, "success_rate": 0}
+        total = completed + failed
+        if total != 0:
+            success_rate = (completed / total) * 100
+            return {"completed": completed, "failed": failed, "total": total, "success_rate": success_rate}
+        return {"completed": completed, "failed": failed, "total": total, "success_rate": 0}
 
     def count_active_agents(self):
         cursor = db.conn.cursor(dictionary=True)

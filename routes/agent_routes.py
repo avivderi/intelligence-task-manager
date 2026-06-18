@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 from database.agent_db import AgentDB
 from logs.logger_config import logger
 from pydantic import BaseModel
@@ -11,9 +11,6 @@ class NewAgent(BaseModel):
 class UpdateAgent(BaseModel):
     name: str | None = None
     specialty: str | None = None
-    is_active: bool | None = None
-    completed_missions: int | None = None
-    failed_missions: int | None = None
     agent_rank: str | None = None
 
 
@@ -64,4 +61,22 @@ def update_agent(id: int, data: UpdateAgent):
 
 
 @router.put('/agents/{id}/deactivate')
+def deactivate_agent(id: int):
+    logger.info("Starts running the deactivate_agent")
+    fun = adb.deactivate_agent(id)
+    if fun:
+        logger.info("The operation was completed successfully.")
+        return "The operation was successful."
+    logger.warning("The operation failed.")
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="agent not found")
+
 @router.get('/agents/{id}/performance')
+def agent_performance(id: int):
+    logger.info("Starts running the agent_performance")
+    fun = adb.get_agent_performance(id)
+    if fun:
+        logger.info("The operation was completed successfully.")
+        return fun
+    logger.warning("The operation failed.")
+    return "The operation failed."
+
