@@ -21,6 +21,8 @@ adb = AgentDB()
 def create_new_agent(data: NewAgent):
     logger.info("Starting to create an agent")
     _data = data.model_dump()
+    if _data["agent_rank"] not in ("Junior", "Senior", "Commander"):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Choose only from (Junior / Senior / Commander)")
     fun = adb.create_agent(_data)
     if fun:
         logger.info("The agent was created successfully.")
@@ -46,7 +48,8 @@ def get_agent_by_id(id: int):
         logger.info("The operation was completed successfully.")
         return fun
     logger.warning("No agent for showing")
-    return {"message": "No agent for showing"}
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="id not found")
+
 
 @router.put('/agents/{id}')
 def update_agent(id: int, data: UpdateAgent):
@@ -57,8 +60,7 @@ def update_agent(id: int, data: UpdateAgent):
         logger.info("The operation was successful.")
         return {"message": "The operation was successful."}
     logger.warning("The operation failed.")
-    return {"message": "The operation failed."}
-
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="id not found")
 
 
 @router.put('/agents/{id}/deactivate')
@@ -79,4 +81,4 @@ def agent_performance(id: int):
         logger.info("The operation was successful.")
         return {"message": "The operation was successful."}
     logger.warning("The operation failed.")
-    return {"message": "The operation failed."}
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="id not found")

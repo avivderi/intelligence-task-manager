@@ -16,6 +16,7 @@ def reports():
     completed = mdb.count_by_status("COMPLETED")
     failed = mdb.count_by_status("FAILED")
     critical = mdb.count_critical_missions()
+    logger.info("The operation was successful.")
     return {"active_agents_count": active,
             "total_missions": total,
             "open_missions": _open,
@@ -32,6 +33,7 @@ def missions_by_status():
     completed = mdb.count_by_status("COMPLETED")
     failed = mdb.count_by_status("FAILED")
     critical = mdb.count_critical_missions()
+    logger.info("The operation was successful.")
     return {
         "open": _open,
         "in_progress": in_progress,
@@ -43,4 +45,9 @@ def missions_by_status():
 @router.get('/reports/top-agent') # הסוכן המצטיין (get_top_agent)
 def top_agent():
     logger.info("Starts running the top_agent")
-    return mdb.get_top_agent()
+    fun = mdb.get_top_agent()
+    if fun:
+        logger.info("The operation was successful.")
+        return fun
+    logger.warning("The operation failed.")
+    return []

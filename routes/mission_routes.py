@@ -27,7 +27,7 @@ def create_mission(data: NewMisson):
         logger.info("The operation was successful.")
         return {"message": "The operation was successful."}
     logger.warning("The operation failed.")
-    return {"message": "The operation failed."}
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="id not found")
 
 
 @router.get('/missions')
@@ -38,7 +38,7 @@ def all_mission():
         logger.info("The operation was successful.")
         return fun
     logger.warning("The operation failed.")
-    return []
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="id not found")
 
 
 @router.get('/missions/{id}') # משימה לפי ID
@@ -49,7 +49,8 @@ def mission_by_id(id: int):
         logger.info("The operation was successful.")
         return fun
     logger.warning("The operation failed.")
-    return []
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="id not found")
+
 
 
 @router.put('/missions/{id}/assign/{agent_id}')
@@ -94,7 +95,7 @@ def start_mission(id:int):
         logger.info("The operation was successful.")
         return {"message": "The operation was successful."}
     logger.warning("The operation failed.")
-    return {"message": "The operation failed."}
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="id not found")
 
 
 @router.put('/missions/{id}/complete') # סיום בהצלחה
@@ -106,7 +107,7 @@ def finish_mission(id:int):
         logger.info("The operation was successful.")
         return {"message": "The operation was successful."}
     logger.warning("The operation failed.")
-    return {"message": "The operation failed."}
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="id not found")
 
 
 @router.put('/missions/{id}/fail') # סיום בכישלון
@@ -118,7 +119,7 @@ def failed_mission(id:int):
         logger.info("The operation was successful.")
         return {"message": "The operation was successful."}
     logger.warning("The operation failed.")
-    return {"message": "The operation failed."}
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="id not found")
 
 
 @router.put('/missions/{id}/cancel') # ביטול משימה
@@ -129,5 +130,5 @@ def failed_mission(id:int):
         logger.info("The operation was successful.")
         return {"message": "The operation was successful."}
     logger.warning("The operation failed.")
-    return {"message": "The operation failed."}
+    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="id not found")
 

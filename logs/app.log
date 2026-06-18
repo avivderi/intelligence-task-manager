@@ -17,3 +17,19 @@
 2026-06-18 15:58:46,940 - INFO - The operation was successful.
 2026-06-18 16:02:12,226 - INFO - The operation was successful.
 2026-06-18 16:02:28,943 - INFO - The operation was successful.
+2026-06-18 16:20:57,277 - INFO - Starts the create table of agents
+2026-06-18 16:20:57,283 - INFO - Starts the create table of missions
+2026-06-18 16:20:57,287 - INFO - finish the create table of agents and missions
+2026-06-18 16:21:34,220 - INFO - Starting to create an agent
+2026-06-18 16:21:34,222 - ERROR - Database action failed: Data truncated for column 'agent_rank' at row 1 (Code: 1265)
+2026-06-18 16:25:20,393 - INFO - Starts the create table of agents
+2026-06-18 16:25:20,398 - INFO - Starts the create table of missions
+2026-06-18 16:25:20,402 - INFO - finish the create table of agents and missions
+2026-06-18 16:25:34,568 - INFO - Starting to create an agent
+2026-06-18 16:26:15,548 - INFO - Starts running the all_agents
+2026-06-18 16:26:15,551 - INFO - The operation was completed successfully.
+2026-06-18 16:26:27,011 - INFO - Starting to create an agent
+2026-06-18 16:26:37,360 - INFO - Starts running the get_agent_by_id
+2026-06-18 16:26:37,362 - WARNING - No agent for showing
+2026-06-18 16:27:51,366 - INFO - Starts running the update_agent
+2026-06-18 16:27:51,370 - WARNING - The operation failed.
