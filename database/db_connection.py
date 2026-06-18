@@ -1,4 +1,5 @@
 import mysql.connector
+from logs.logger_config import logger
 
 class DB_connection:
     def __init__(self):
@@ -12,6 +13,7 @@ class DB_connection:
             )
         
     def get_conncation(self):
+        logger.info("Starts the create and connection database")
         if self.conn is None or not self.conn.is_connected():
             self.connect()
         return self.conn
@@ -24,6 +26,7 @@ class DB_connection:
 
 
     def create_tables(self):
+        logger.info("Starts the create table of agents")
         cursor = self.conn.cursor()
         cursor.execute(
             '''
@@ -40,6 +43,7 @@ class DB_connection:
             )
         self.conn.commit()
 
+        logger.info("Starts the create table of missions")
         cursor.execute(
             '''
             CREATE TABLE IF NOT EXISTS missions(
@@ -56,6 +60,8 @@ class DB_connection:
             '''
         )
         self.conn.commit()
+        logger.info("finish the create table of agents and missions")
+
         
         
     def close_db(self):

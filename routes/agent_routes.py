@@ -54,10 +54,11 @@ def update_agent(id: int, data: UpdateAgent):
     _data = data.model_dump(exclude_unset=True)
     fun = adb.update_agent(id, _data)
     if fun:
-        logger.info("The operation was completed successfully.")
-        return "The operation was successful."
+        logger.info("The operation was successful.")
+        return {"message": "The operation was successful."}
     logger.warning("The operation failed.")
-    return "The operation failed."
+    return {"message": "The operation failed."}
+
 
 
 @router.put('/agents/{id}/deactivate')
@@ -65,8 +66,8 @@ def deactivate_agent(id: int):
     logger.info("Starts running the deactivate_agent")
     fun = adb.deactivate_agent(id)
     if fun:
-        logger.info("The operation was completed successfully.")
-        return "The operation was successful."
+        logger.info("The operation was successful.")
+        return {"message": "The operation was successful."}
     logger.warning("The operation failed.")
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="agent not found")
 
@@ -75,8 +76,7 @@ def agent_performance(id: int):
     logger.info("Starts running the agent_performance")
     fun = adb.get_agent_performance(id)
     if fun:
-        logger.info("The operation was completed successfully.")
-        return fun
+        logger.info("The operation was successful.")
+        return {"message": "The operation was successful."}
     logger.warning("The operation failed.")
-    return "The operation failed."
-
+    return {"message": "The operation failed."}

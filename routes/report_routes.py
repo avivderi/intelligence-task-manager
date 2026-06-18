@@ -9,6 +9,7 @@ router = APIRouter()
 
 @router.get('/reports/summary') # דוח כללי של המערכת
 def reports():
+    logger.info("Starts running the reports")
     active = adb.count_active_agents()
     total = mdb.count_all_missions()
     _open = mdb.count_open_missions()
@@ -25,6 +26,7 @@ def reports():
 
 @router.get('/reports/missions-by-status') # משימות לפי סטטוס
 def missions_by_status():
+    logger.info("Starts running the missions_by_status")
     _open = mdb.count_open_missions()
     in_progress = mdb.count_by_status("IN_PROGRESS")
     completed = mdb.count_by_status("COMPLETED")
@@ -40,4 +42,5 @@ def missions_by_status():
 
 @router.get('/reports/top-agent') # הסוכן המצטיין (get_top_agent)
 def top_agent():
+    logger.info("Starts running the top_agent")
     return mdb.get_top_agent()

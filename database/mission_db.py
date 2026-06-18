@@ -1,6 +1,7 @@
 from database.db_connection import DB as db
 from database.agent_db import AgentDB
 
+
 agent_db = AgentDB()
 
 class MissionDB:
@@ -62,9 +63,7 @@ class MissionDB:
             db.conn.commit()
             is_update = cursor.rowcount > 0
             cursor.close()
-            if is_update:
-                return "The operation was successful."
-        return "The operation failed."
+            return is_update
 
     def get_open_missions_by_agent(self, id):
         cursor = db.conn.cursor(dictionary=True)
