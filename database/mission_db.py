@@ -1,7 +1,6 @@
 from database.db_connection import DB as db
 from database.agent_db import AgentDB
 
-
 agent_db = AgentDB()
 
 class MissionDB:
@@ -102,9 +101,8 @@ class MissionDB:
 
     def get_top_agent(self):
         cursor = db.conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM agents ORDER BY completed_missions DESC LIMIT 1")
+        cursor.execute("SELECT * FROM agents ORDER BY completed_missions DESC")
         id_agent = cursor.fetchone()
         agent = agent_db.get_agent_by_id(id_agent)
         cursor.close()
         return agent if agent else None
-
