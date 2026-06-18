@@ -155,7 +155,8 @@ and the table settings. And if they are approved... the creation is successfully
 created... and at the end the system returns the user the details of the newly created
 agent... Another example - for assigning a task to an agent... The user enters -
 @router.put('/missions/{id}/assign/{agent_id}') which runs a function -
-def assign_mission(mission_id, agent_id) b and the system performs 6 checks to see
+def assign_mission(mission_id, agent_id).
+and the system performs 6 checks to see
 if the agent meets all the criteria for assigning a task:
 1. If the task exists
 2. If the agent exists
